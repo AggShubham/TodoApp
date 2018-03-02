@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorPrimary"
+    android:orientation="vertical"
+    tools:context="com.example.shubham.mynotes.AddTaskActivity">
+
+    <EditText
+        android:id="@+id/newtask"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:background="@android:color/background_light"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Large"
+        android:hint="Task" />
+
+    <EditText
+        android:id="@+id/taskcost"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="10dp"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/background_light"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:hint="task cost" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp"
+        android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+        android:text="Description :" />
+
+    <EditText
+        android:id="@+id/desp"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_margin="10dp"
+        android:layout_weight="1"
+        android:gravity="start"
+        android:background="@android:color/background_light"
+        android:textColor="@android:color/black" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="save"
+        android:text="save"
+        android:layout_marginBottom="10dp"/>
+
+</LinearLayout>
