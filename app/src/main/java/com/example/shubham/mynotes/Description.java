@@ -63,6 +63,7 @@ public class Description extends AppCompatActivity {
                 comments.add(comment);
                 adapter.notifyDataSetChanged();
 
+
             }
         }
     }
