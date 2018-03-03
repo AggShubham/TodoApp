@@ -57,9 +57,11 @@ public class Description extends AppCompatActivity {
 
                 database = openHelper.getWritableDatabase();
                 ContentValues contentValues = new ContentValues();
-                contentValues.put(Contract.TaskClass.COMMENT, comment);
+                contentValues.put(Contract.Comments.COMMENT, comment);
+                contentValues.put(Contract.Comments.TASK_ID, Contract.TaskClass.ID);
 
-                long id = database.insert(Contract.TaskClass.TABLE_NAME, null, contentValues);
+                long id = database.insert(Contract.Comments.TABLE_NAME, null, contentValues);
+
                 comments.add(comment);
                 adapter.notifyDataSetChanged();
 

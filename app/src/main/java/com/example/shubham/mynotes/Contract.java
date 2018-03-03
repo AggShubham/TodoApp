@@ -16,7 +16,14 @@ public class Contract {
         public static final String TITLE = "Taskname";
         public static final String DESCRIPTION = "desc";
         public static final String COST = "Taskcost";
-        public static final String COMMENT = "Comment";
 
+    }
+
+    static class Comments {
+
+        public static final String TABLE_NAME = "comments";
+        public static final String ID = "id";
+        public static final String COMMENT = "comment";
+        public static final String TASK_ID ="task_id";
     }
 }

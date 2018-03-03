@@ -12,6 +12,11 @@ public class OpenHelper extends SQLiteOpenHelper {
     public OpenHelper(Context context) {
         super(context, Contract.DATABASE_NAME, null,Contract.VERSION);
     }
+    @Override
+    public void onConfigure(SQLiteDatabase sqLiteDatabase) {
+        super.onConfigure(sqLiteDatabase);
+        sqLiteDatabase.setForeignKeyConstraintsEnabled(true);
+    }
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
@@ -21,6 +26,12 @@ public class OpenHelper extends SQLiteOpenHelper {
                 + Contract.TaskClass.COST + " INTEGER, "
                 + Contract.TaskClass.DESCRIPTION + " TEXT)";
         sqLiteDatabase.execSQL(tasksql);
+        String commentsSql = "CREATE TABLE " + Contract.Comments.TABLE_NAME + " ( " +
+                Contract.Comments.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                Contract.Comments.COMMENT + " TEXT, " +
+                Contract.Comments.TASK_ID + " INTEGER,  " +
+                "FOREIGN KEY (" + Contract.Comments.TASK_ID + ") REFERENCES " + Contract.TaskClass.TABLE_NAME + " (" + Contract.TaskClass.ID + ") ON DELETE CASCADE)";
+        sqLiteDatabase.execSQL(commentsSql);
     }
 
     @Override

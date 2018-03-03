@@ -21,9 +21,11 @@ public class CommentActivity extends AppCompatActivity {
         setContentView(R.layout.activity_comment);
         editText = findViewById(R.id.addcomment);
         Intent intent = getIntent();
-        String comment = intent.getStringExtra(TASK_COMMENT_KEY);
-        editText.setText(comment);
-        Add_Mode = false;
+        if (intent.hasExtra(TASK_COMMENT_KEY)) {
+            String comment = intent.getStringExtra(TASK_COMMENT_KEY);
+            editText.setText(comment);
+            Add_Mode = false;
+        }
     }
     public void save_comment(View view) {
         String taskComment = editText.getText().toString();
