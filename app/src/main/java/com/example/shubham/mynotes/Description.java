@@ -1,6 +1,7 @@
 package com.example.shubham.mynotes;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
@@ -15,10 +16,12 @@ import java.util.ArrayList;
 
 public class Description extends AppCompatActivity {
     TextView textView;
+    Context context;
     ArrayList<String> comments = new ArrayList<>();
     SQLiteDatabase database;
     ArrayAdapter<String> adapter;
     OpenHelper openHelper;
+    int taskid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,6 +31,7 @@ public class Description extends AppCompatActivity {
         ListView listView = findViewById(R.id.commentslist);
         Intent intent = getIntent();
         String desc = intent.getStringExtra("task_description");
+        taskid = intent.getIntExtra("task_id",-1);
         textView.setText(desc);
         adapter = new ArrayAdapter<String>(this, R.layout.activity_description, comments);
         listView.setAdapter(adapter);
@@ -54,11 +58,12 @@ public class Description extends AppCompatActivity {
         if (requestCode == 1) {
             if (resultCode == 1) {
                 comment = data.getStringExtra(CommentActivity.TASK_COMMENT_KEY);
-
+                CommentsClass commentsClass = new CommentsClass(comment,taskid);
+                openHelper = OpenHelper.getInstance(this);
                 database = openHelper.getWritableDatabase();
                 ContentValues contentValues = new ContentValues();
                 contentValues.put(Contract.Comments.COMMENT, comment);
-                contentValues.put(Contract.Comments.TASK_ID,getTaskId());
+                contentValues.put(Contract.Comments.TASK_ID,commentsClass.getTaskid());
 
                 database.insert(Contract.Comments.TABLE_NAME, null, contentValues);
 

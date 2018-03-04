@@ -35,7 +35,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         listView = findViewById(R.id.listView);
-        openHelper=new OpenHelper(this);
+        openHelper=OpenHelper.getInstance(this);
         adapter = new TaskAdapter(this, tasks);
 
 //        tasks = new ArrayList<>();
@@ -54,12 +54,14 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String description=tasks.get(i).description;
+        int id = tasks.get(i).id;
         Log.d("TAGGER",description);
 //        String description=null;
 //        task = new TaskClass(description);
 //        description=task.getDescription();
         Intent intent = new Intent(this, Description.class);
         intent.putExtra(AddTaskActivity.TASK_DESCRIPTION_kEY,description);
+        intent.putExtra(AddTaskActivity.TASK_ID_KEY,id);
 //        intent.putExtra(AddTaskActivity.TASK_DESCRIPTION_kEY,description);
         startActivity(intent);
     }

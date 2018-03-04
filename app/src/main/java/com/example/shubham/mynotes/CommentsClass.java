@@ -18,7 +18,7 @@ public class CommentsClass {
     public CommentsClass(String comment, int taskid) {
         this.comment = comment;
         this.taskid = taskid;
-        this.id = id;
+        this.id = -1;
     }
 
     public int getId() {

@@ -9,6 +9,15 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 
 public class OpenHelper extends SQLiteOpenHelper {
+    private static OpenHelper openHelper;
+
+    public static OpenHelper getInstance(Context context){
+        if(openHelper == null){
+            openHelper = new OpenHelper(context.getApplicationContext());
+        }
+        return  openHelper;
+    }
+
     public OpenHelper(Context context) {
         super(context, Contract.DATABASE_NAME, null,Contract.VERSION);
     }
