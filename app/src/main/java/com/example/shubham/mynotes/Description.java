@@ -3,6 +3,7 @@ package com.example.shubham.mynotes;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -33,8 +34,9 @@ public class Description extends AppCompatActivity {
         String desc = intent.getStringExtra("task_description");
         taskid = intent.getIntExtra("task_id",-1);
         textView.setText(desc);
-        adapter = new ArrayAdapter<String>(this, R.layout.activity_description, comments);
+        adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,comments);
         listView.setAdapter(adapter);
+        fetchCommentsFromDb();
     }
 
     @Override
@@ -69,9 +71,19 @@ public class Description extends AppCompatActivity {
 
                 comments.add(comment);
                 adapter.notifyDataSetChanged();
-
-
             }
+        }
+    }
+    private void fetchCommentsFromDb(){
+        String [] selectionArgs = {taskid+""};
+        openHelper = OpenHelper.getInstance(this);
+        database = openHelper.getReadableDatabase();
+        Cursor cursor = database.query(Contract.Comments.TABLE_NAME,null,Contract.Comments.TASK_ID + " = ?",selectionArgs,null,null,null,null);
+        while(cursor.moveToNext()){
+            String comment = cursor.getString(cursor.getColumnIndex(Contract.Comments.COMMENT));
+            int id = cursor.getInt(cursor.getColumnIndex(Contract.Comments.TASK_ID));
+            CommentsClass commentsClass = new CommentsClass(comment,id);
+            comments.add(comment);
         }
     }
 }

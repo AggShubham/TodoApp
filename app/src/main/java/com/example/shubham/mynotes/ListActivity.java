@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -28,6 +29,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
     TaskAdapter adapter;
     OpenHelper openHelper;
     TaskClass task;
+    Button button;
     SQLiteDatabase database;
 
     @Override
@@ -35,6 +37,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
         listView = findViewById(R.id.listView);
+        button = findViewById(R.id.edit);
         openHelper=OpenHelper.getInstance(this);
         adapter = new TaskAdapter(this, tasks);
 
@@ -48,8 +51,15 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         fetchTasksFromDb();
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
+//        button.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(ListActivity.this,AddTaskActivity.class);
+//                intent.putExtra(AddTaskActivity.TASK_DESCRIPTION_kEY,description);
+//                intent.putExtra(AddTaskActivity.TASK_ID_KEY,id);
+//            }
+//        });
     }
-
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -62,7 +72,6 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent intent = new Intent(this, Description.class);
         intent.putExtra(AddTaskActivity.TASK_DESCRIPTION_kEY,description);
         intent.putExtra(AddTaskActivity.TASK_ID_KEY,id);
-//        intent.putExtra(AddTaskActivity.TASK_DESCRIPTION_kEY,description);
         startActivity(intent);
     }
 
