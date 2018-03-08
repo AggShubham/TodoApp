@@ -2,13 +2,17 @@ package com.example.shubham.mynotes;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,7 +20,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 
 public class Description extends AppCompatActivity {
-    TextView textView;
+    TextView textView,textView1;
     Context context;
     ArrayList<String> comments = new ArrayList<>();
     SQLiteDatabase database;
@@ -29,13 +33,45 @@ public class Description extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_description);
         textView = findViewById(R.id.description);
+        textView1 = findViewById(R.id.time);
         ListView listView = findViewById(R.id.commentslist);
         Intent intent = getIntent();
         String desc = intent.getStringExtra("task_description");
+        String time = intent.getStringExtra("task_todo_time");
         taskid = intent.getIntExtra("task_id",-1);
         textView.setText(desc);
+        textView1.setText(time);
+
         adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,comments);
         listView.setAdapter(adapter);
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i,final long l) {
+                AlertDialog.Builder alert = new AlertDialog.Builder(Description.this);
+                final int a = i;
+                alert.setTitle("Delete Comment!!");
+                alert.setMessage("Are you sure to delete this comment");
+                alert.setPositiveButton("DELETE", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        comments.remove(a);
+                        database=openHelper.getWritableDatabase();
+                        String[] ids={l+""};
+                        database.delete(Contract.Comments.TABLE_NAME,Contract.Comments.TASK_ID + " = ? ",ids);
+                        adapter.notifyDataSetChanged();
+                        dialogInterface.dismiss();
+                    }
+                });
+                alert.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        dialogInterface.dismiss();
+                    }
+                });
+                alert.show();
+                return true;
+            }
+        });
         fetchCommentsFromDb();
     }
 
@@ -86,4 +122,5 @@ public class Description extends AppCompatActivity {
             comments.add(comment);
         }
     }
+
 }

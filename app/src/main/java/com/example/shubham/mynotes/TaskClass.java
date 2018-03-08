@@ -5,10 +5,22 @@ package com.example.shubham.mynotes;
  */
 
 public class TaskClass {
+
     String name;
     int taskcost;
     String description;
+    String time;
+    String date;
     int id;
+
+    public TaskClass(String name, int taskcost, String description, String time, String date, int id) {
+        this.name = name;
+        this.taskcost = taskcost;
+        this.description = description;
+        this.time = time;
+        this.date = date;
+        this.id = id;
+    }
 
     public TaskClass(String name, int taskcost , String description) {
         this.name = name;
@@ -53,4 +65,21 @@ public class TaskClass {
     public int getId() {return id;}
 
     public void setId(int id) {this.id = id;}
+
+
+    public String getTime() {
+        return time;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
 }

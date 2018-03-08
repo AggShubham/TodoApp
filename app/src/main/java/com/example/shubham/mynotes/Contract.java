@@ -16,6 +16,8 @@ public class Contract {
         public static final String TITLE = "Taskname";
         public static final String DESCRIPTION = "desc";
         public static final String COST = "Taskcost";
+        public static final String TIME = "Todotime";
+        public static final String DATE = "Tododate";
 
     }
 

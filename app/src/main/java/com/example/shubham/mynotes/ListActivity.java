@@ -22,7 +22,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 
-public class ListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener , AdapterView.OnItemLongClickListener {
+public class ListActivity extends AppCompatActivity implements AdapterView.OnItemClickListener , AdapterView.OnItemLongClickListener, TaskAdapter.EditButtonClickListener {
     public static final String POSITION_KEY = "position";
     ListView listView;
     ArrayList<TaskClass> tasks=new ArrayList<>();
@@ -39,7 +39,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         listView = findViewById(R.id.listView);
         button = findViewById(R.id.edit);
         openHelper=OpenHelper.getInstance(this);
-        adapter = new TaskAdapter(this, tasks);
+        adapter = new TaskAdapter(this, tasks,this);
 
 //        tasks = new ArrayList<>();
 //        for (int i = 0; i < 10; i++) {
@@ -51,20 +51,14 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         fetchTasksFromDb();
         listView.setOnItemClickListener(this);
         listView.setOnItemLongClickListener(this);
-//        button.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent intent = new Intent(ListActivity.this,AddTaskActivity.class);
-//                intent.putExtra(AddTaskActivity.TASK_DESCRIPTION_kEY,description);
-//                intent.putExtra(AddTaskActivity.TASK_ID_KEY,id);
-//            }
-//        });
     }
+
 
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
         String description=tasks.get(i).description;
         int id = tasks.get(i).id;
+        String time = tasks.get(i).time;
         Log.d("TAGGER",description);
 //        String description=null;
 //        task = new TaskClass(description);
@@ -72,6 +66,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         Intent intent = new Intent(this, Description.class);
         intent.putExtra(AddTaskActivity.TASK_DESCRIPTION_kEY,description);
         intent.putExtra(AddTaskActivity.TASK_ID_KEY,id);
+        intent.putExtra(AddTaskActivity.TASK_TIME_KEY,time);
         startActivity(intent);
     }
 
@@ -102,6 +97,7 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
         return true;
     }
 
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
@@ -128,6 +124,32 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
                 task.name = data.getStringExtra(AddTaskActivity.TASK_NAME_KEY);
                 task.taskcost = Integer.parseInt(data.getStringExtra(AddTaskActivity.TASK_COST_kEY));
                 task.description = data.getStringExtra(AddTaskActivity.TASK_DESCRIPTION_kEY);
+                task.time = data.getStringExtra(AddTaskActivity.TASK_TIME_KEY);
+                task.date = data.getStringExtra(AddTaskActivity.TASK_DATE_KEY);
+
+
+                database = openHelper.getWritableDatabase();
+
+                ContentValues contentValues = new ContentValues();
+                contentValues.put(Contract.TaskClass.TITLE,task.getName());
+                contentValues.put(Contract.TaskClass.DESCRIPTION,task.getDescription());
+                contentValues.put(Contract.TaskClass.COST,task.getTaskcost());
+                contentValues.put(Contract.TaskClass.TIME,task.getTime());
+                contentValues.put(Contract.TaskClass.DATE,task.getDate());
+
+                long id = database.insert(Contract.TaskClass.TABLE_NAME,null,contentValues);
+                task.setId((int) id);
+                tasks.add(task);
+                adapter.notifyDataSetChanged();
+            }
+        }
+        else if (requestCode == 2) {
+            if (resultCode == 2) {
+
+                task = new TaskClass(name, taskcost, description);
+                task.name = data.getStringExtra(AddTaskActivity.TASK_NAME_KEY);
+                task.taskcost = Integer.parseInt(data.getStringExtra(AddTaskActivity.TASK_COST_kEY));
+                task.description = data.getStringExtra(AddTaskActivity.TASK_DESCRIPTION_kEY);
 
 
                 database = openHelper.getWritableDatabase();
@@ -141,19 +163,9 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
                 task.setId((int) id);
                 tasks.add(task);
                 adapter.notifyDataSetChanged();
+                }
             }
         }
-//        else if (requestCode == 2) {
-//            if (resultCode == 2) {
-//                String task = data.getStringExtra(AddTaskActivity.TASK_NAME_KEY);
-//                int position = data.getIntExtra(POSITION_KEY, -1);
-//                if (position != -1) {
-//                    tasks.set(position, task);
-//                    adapter.notifyDataSetChanged();
-//                }
-//            }
-//        }
-    }
 
     private void fetchTasksFromDb() {
 
@@ -165,11 +177,32 @@ public class ListActivity extends AppCompatActivity implements AdapterView.OnIte
             String desc = cursor.getString(cursor.getColumnIndex(Contract.TaskClass.DESCRIPTION));
             int cost = cursor.getInt(cursor.getColumnIndex(Contract.TaskClass.COST));
             int id = cursor.getInt(cursor.getColumnIndex(Contract.TaskClass.ID));
+            String time = cursor.getString(cursor.getColumnIndex(Contract.TaskClass.TIME));
+            String date = cursor.getString(cursor.getColumnIndex(Contract.TaskClass.DATE));
 
-            TaskClass task = new TaskClass(title, cost, desc, id);
+            TaskClass task = new TaskClass(title, cost, desc, time, date, id);
             tasks.add(task);
 
         }
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void onEditButtonClicked(int pos) {
+        Intent intent = new Intent(this,AddTaskActivity.class);
+        int id = tasks.get(pos).id;
+        String taskname = tasks.get(pos).name;
+        int taskcost = tasks.get(pos).taskcost;
+        String description = tasks.get(pos).description;
+        String time = tasks.get(pos).time;
+        String date = tasks.get(pos).date;
+        intent.putExtra(AddTaskActivity.TASK_NAME_KEY,taskname);
+        intent.putExtra(AddTaskActivity.TASK_COST_kEY,taskcost);
+        intent.putExtra(AddTaskActivity.TASK_DESCRIPTION_kEY,description);
+        intent.putExtra(AddTaskActivity.TASK_ID_KEY,id);
+        intent.putExtra(AddTaskActivity.TASK_DATE_KEY,date);
+        intent.putExtra(AddTaskActivity.TASK_TIME_KEY,time);
+
+        startActivityForResult(intent,2);
     }
 }

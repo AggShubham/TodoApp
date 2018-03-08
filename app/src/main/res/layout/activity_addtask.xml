@@ -43,6 +43,56 @@
         android:gravity="start"
         android:background="@android:color/background_light"
         android:textColor="@android:color/black" />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"
+            android:text="TODO Date :"
+            android:gravity="center"
+            android:layout_weight="1"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="TODO Time :"
+            android:textAppearance="@style/Base.TextAppearance.AppCompat.Medium"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="10dp"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/todoDate"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:hint="yyyy-mm-dd"
+            android:maxLength="10"
+            android:layout_marginHorizontal="30dp"
+            android:gravity="center"
+            android:background="@android:color/background_light" />
+
+        <EditText
+            android:id="@+id/todoTime"
+            android:layout_width="120dp"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="30dp"
+            android:maxLength="8"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:hint="hh:mm:ss"
+            android:background="@android:color/background_light" />
+    </LinearLayout>
 
     <Button
         android:layout_width="wrap_content"

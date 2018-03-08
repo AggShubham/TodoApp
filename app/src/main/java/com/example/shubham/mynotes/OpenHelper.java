@@ -33,7 +33,9 @@ public class OpenHelper extends SQLiteOpenHelper {
                 + Contract.TaskClass.ID + " INTEGER PRIMARY KEY AUTOINCREMENT  , "
                 + Contract.TaskClass.TITLE + " TEXT , "
                 + Contract.TaskClass.COST + " INTEGER, "
-                + Contract.TaskClass.DESCRIPTION + " TEXT)";
+                + Contract.TaskClass.DESCRIPTION + " TEXT, "
+                + Contract.TaskClass.DATE + " TEXT, "
+                + Contract.TaskClass.TIME+ " TEXT )";
         sqLiteDatabase.execSQL(tasksql);
         String commentsSql = "CREATE TABLE " + Contract.Comments.TABLE_NAME + " ( " +
                 Contract.Comments.ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
